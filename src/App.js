@@ -3,7 +3,7 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <h1>siema</h1>
+      <h1>Biblioteka Szkolna CKZiU Jaworzno</h1>
     </div>
   );
 }
