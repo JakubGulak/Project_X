@@ -35,8 +35,8 @@ function App() {
         if (docSnapshot.exists()) {
           // Jeśli dokument istnieje, pobierz pole "tytul" i "autor" z dokumentu
           const data = docSnapshot.data();
-          const title = data.tytul;
-          const author = data.autor;
+          const title = data.Title;
+          const author = data.Author;
           
           // Ustaw dane w stanie komponentu
           setBookData({ title, author });
@@ -53,7 +53,6 @@ function App() {
     <div className="App">
       <h1>Biblioteka Szkolna CKZiU Jaworzno</h1>
       <div>
-        <h2>Dane z Firestore:</h2>
         <p>Tytuł: {bookData.title}</p>
         <p>Autor: {bookData.author}</p>
       </div>
