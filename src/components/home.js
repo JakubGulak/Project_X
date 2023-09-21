@@ -3,7 +3,9 @@ import React from 'react';
 function Home() {
   return (
     <div>
-        <h1>Biblioteka Szkolna CKZiU Jaworzno</h1>
+      <div id="header">
+          <h1>Biblioteka Szkolna CKZiU w Jaworznie</h1>
+      </div>
         <a href="/main">Login</a>
     </div>
   );

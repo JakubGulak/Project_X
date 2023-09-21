@@ -50,9 +50,9 @@ function Main() {
 
   return (
     <div>
-      <h1>Strona główna</h1>
-      <p>Tytuł książki: {bookData.title}</p>
-      <p>Autor książki: {bookData.author}</p>
+      <h1>Biblioteka Szkolna</h1>
+      <p className='bookTitle'>Tytuł książki: {bookData.title}</p>
+      <p className='bookAuthor'>Autor książki: {bookData.author}</p>
     </div>
   );
 }
