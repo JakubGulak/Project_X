@@ -1,10 +1,28 @@
-#fourthicon {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 70%; /* Szerokość obrazka */
-    height: auto; /* Automatyczna wysokość dla zachowania proporcji */
+#fourthicon-container {
+    position: relative; /* Konieczne do pozycjonowania napisu */
   }
+
+  #fourthicon {
+    margin-left: 24%;
+    margin-top: 5%;
+    width: 50%;
+    height: 50%;
+  }
+  
+  .book-image-container {
+    position: relative;
+  }
+  
+  .book-caption {
+    font-size: 3vh;
+    position: absolute;
+    top: 50%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5); /* Kolor tła napisu */
+    color: white; /* Kolor tekstu napisu */
+    padding: 5px; /* Odstępy wewnętrzne napisu */
+  }
+  
   
   

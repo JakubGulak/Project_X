@@ -2,7 +2,7 @@ import React from 'react';
 import facebook from './facebook.png';
 import instagram from './instagram.png';
 import ckziu from './ckziu.png'
-import hands from './hands.png'
+import book from './book.png'
 import './login.css'
 
 function Login() {
@@ -27,7 +27,9 @@ function Login() {
       </div>
       <div id='content'>
         <div id='fourthicon-container'>
-            <img src={hands} alt='handsreadingbook' id='fourthicon' />
+          <div className='book-image-container'>
+            <img src={book} alt='book' id='fourthicon' />
+          </div>
         </div>
       </div>
     </div>
