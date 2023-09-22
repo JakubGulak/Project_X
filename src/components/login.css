@@ -1,0 +1,10 @@
+#fourthicon {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%; /* Szerokość obrazka */
+    height: auto; /* Automatyczna wysokość dla zachowania proporcji */
+  }
+  
+  

@@ -6,23 +6,25 @@
 }
 
 #header {
-    background-color: #222222;
+    background-color: #212121;
     width: 100%;
     height: 7vh;
 }
 
 #header-content {
+    margin-top: -2.5vh;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: #222222;
+    background-color: #212121;
 }
 
-h1 {
+#title {
     text-align: center;
     color: white;
     flex-grow: 1;
+    margin-right: 5vw;
 }
 
 #firsticon, #secondicon, #thirdicon {
@@ -45,6 +47,7 @@ a {
 
 @media (max-width: 768px) {
     #header-content {
+        margin-top: 0vh;
         flex-direction: column; 
         align-items: center;
     }
@@ -59,7 +62,7 @@ a {
     }
 
     #header {
-        height: 20vh;
+        height: 22vh;
     }  
 }
 
@@ -82,3 +85,10 @@ a {
         height: 30vh;
     }  
 }
+
+/* login */
+
+#loginHeader {
+    background-color: black;
+}
+

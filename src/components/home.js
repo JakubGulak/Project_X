@@ -2,7 +2,7 @@ import React from 'react';
 import facebook from './facebook.png';
 import instagram from './instagram.png';
 import ckziu from './ckziu.png'
-import './styles.css'
+import './home.css'
 
 function Home() {
   return (
@@ -20,8 +20,8 @@ function Home() {
                 <img src={instagram} alt="Instagram" id='thirdicon' />
               </a>
           </div>
-          <h1>Biblioteka Szkolna CKZiU w Jaworznie</h1>
-          <a href="/main">Login</a>
+          <h1 id='title'>Biblioteka Szkolna CKZiU w Jaworznie</h1>
+          <a href="/login">Zaloguj się!</a>
         </div>
       </div>
       <div id='content'></div>
