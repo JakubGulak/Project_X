@@ -1,9 +1,9 @@
 import React from 'react';
 import facebook from './facebook.png';
 import instagram from './instagram.png';
-import ckziu from './ckziu.png'
-import book from './book.png'
-import './login.css'
+import ckziu from './ckziu.png';
+import book from './book.png';
+import './login.css';
 
 function Login() {
   return (
@@ -25,10 +25,21 @@ function Login() {
           <a href="/home">← Powrót</a>
         </div>
       </div>
-      <div id='content'>
+      <div id='content' className='flex-container'>
+        <div id='login-form'>
+          <div className='input-container'>
+            <input type='text' id='login' name='login'/>
+          </div>
+          <div className='input-container'>
+            <input type='password' id='pass' name='pass'/>
+          </div>
+          <button id='login-button'>Zaloguj</button>
+        </div>
         <div id='fourthicon-container'>
           <div className='book-image-container'>
             <img src={book} alt='book' id='fourthicon' />
+            <input id='loginInput'></input>
+            <input id='passInput'></input>
           </div>
         </div>
       </div>

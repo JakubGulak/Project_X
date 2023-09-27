@@ -1,29 +1,33 @@
-#fourthicon-container {
-    position: relative; /* Konieczne do pozycjonowania napisu */
-  }
-
   #fourthicon {
     margin-left: 24%;
-    margin-top: 5%;
+    margin-top: 1%;
     width: 50%;
     height: 50%;
   }
-  
-  .book-image-container {
-    position: relative;
-  }
-  
-  .book-caption {
-    font-size: 3vh;
+
+  #loginInput {
     position: absolute;
-    top: 50%;
-    left: 40%;
+    top: 46.5%;
+    left: 59%;
     transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.5); /* Kolor tła napisu */
-    color: white; /* Kolor tekstu napisu */
-    padding: 5px; /* Odstępy wewnętrzne napisu */
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
   }
 
+  #passInput {
+    position: absolute;
+    top: 62%;
+    left: 59%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+  }
+  
+  
+  
+  
   
   
   
