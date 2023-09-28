@@ -45,7 +45,7 @@ a {
     } 
 }
 
-@media (max-width: 768px) {
+@media (max-width: 850px) {
     #header-content {
         margin-top: 0vh;
         flex-direction: column; 
@@ -66,7 +66,7 @@ a {
     }  
 }
 
-@media (max-width: 608px) {
+@media (max-width: 638px) {
     #header-content {
         flex-direction: column; 
         align-items: center;
@@ -83,10 +83,9 @@ a {
 
     #header {
         height: 30vh;
-    }  
+    } 
+ 
 }
-
-/* login */
 
 #loginHeader {
     background-color: black;
