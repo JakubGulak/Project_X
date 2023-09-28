@@ -6,7 +6,7 @@
 
 #loginInput {
   position: absolute;
-  top: 46.5%;
+  top: 46%;
   left: 59%;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.5);
@@ -17,7 +17,7 @@
 
 #passInput {
   position: absolute;
-  top: 62%;
+  top: 61%;
   left: 59%;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.5);
@@ -46,6 +46,10 @@
   #passInput{
     top: 59%;
   }
+
+  #loginButton{
+    top: 65%;
+  }
 }
 
 @media (max-width: 1250px) {
@@ -56,6 +60,22 @@
   #passInput{
     top: 55%;
   }
+
+  #loginButton{
+    top: 61%;
+  }
+}
+
+@media (max-width: 1150px) {
+  #loginInput{
+    top: 38%;
+  }
+  #passInput{
+    top: 48%;
+  }
+  #loginButton{
+    top: 55%;
+  }
 }
 
 @media (max-width: 1050px) {
@@ -63,16 +83,24 @@
     top: 35%;
   }
   #passInput{
-    top: 50%;
+    top: 46%;
+  }
+
+  #loginButton{
+    top: 52%;
   }
 }
 
 @media (max-width: 950px) {
   #loginInput{
-    top: 32%;
+    top: 31%;
   }
   #passInput{
-    top: 42%;
+    top: 41%;
+  }
+
+  #loginButton{
+    top: 47%;
   }
 }
 
@@ -87,6 +115,11 @@
   }
   #passInput{
     top: 60%;
+    left: 67%;
+  }
+
+  #loginButton{
+    top: 67%;
     left: 67%;
   }
 }
@@ -106,6 +139,11 @@
   #passInput{
     top: 67%;
   }
+
+  #loginButton{
+    top: 73%;
+    padding-right: 10%;
+  }
 }
 
 @media (max-width: 538px) {
@@ -122,5 +160,10 @@
   }
   #passInput{
     top: 65%;
+  }
+
+  #loginButton{
+    top: 72%;
+    padding-right: 12%;
   }
 }
