@@ -26,20 +26,12 @@ function Login() {
         </div>
       </div>
       <div id='content' className='flex-container'>
-        <div id='login-form'>
-          <div className='input-container'>
-            <input type='text' id='login' name='login'/>
-          </div>
-          <div className='input-container'>
-            <input type='password' id='pass' name='pass'/>
-          </div>
-          <button id='login-button'>Zaloguj</button>
-        </div>
         <div id='fourthicon-container'>
           <div className='book-image-container'>
             <img src={book} alt='book' id='fourthicon' />
             <input id='loginInput'></input>
-            <input id='passInput'></input>
+            <input id='passInput' type='password'></input>
+            <button id='loginButton'>Zaloguj!</button>
           </div>
         </div>
       </div>
