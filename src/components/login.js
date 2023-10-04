@@ -5,6 +5,17 @@ import ckziu from './ckziu.png';
 import book from './book.png';
 import './login.css';
 
+const firebaseConfig = {
+  apiKey: "AIzaSyD9cGsHCJl5ciSZlMxLdW-oVq5w9hfc1MM",
+  authDomain: "userslibraryckziu.firebaseapp.com",
+  projectId: "userslibraryckziu",
+  storageBucket: "userslibraryckziu.appspot.com",
+  messagingSenderId: "528770481702",
+  appId: "1:528770481702:web:1242274cbcfb9cdf9bb0e7",
+  measurementId: "G-C543MMB5Z0"
+};
+
+
 function Login() {
   return (
     <div id='loginHeader'>
