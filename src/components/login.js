@@ -16,7 +16,7 @@ const firebaseConfig = {
   messagingSenderId: "528770481702",
   appId: "1:528770481702:web:1242274cbcfb9cdf9bb0e7",
   measurementId: "G-C543MMB5Z0"
-};
+}
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
@@ -30,20 +30,19 @@ function Login() {
     const passInput = document.getElementById("passInput");
     const loginButton = document.getElementById("loginButton");
 
-    loginButton.addEventListener("click", () => {
+    loginButton.addEventListener("click", async () => {
       const login = loginInput.value;
       const password = passInput.value;
 
-      // Zaloguj użytkownika za pomocą Firebase Authentication
-      firebase.auth().signInWithEmailAndPassword(login, password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          console.log("Zalogowano jako:", user.email);
-        })
-        .catch((error) => {
-          // Ustaw błąd w stanie komponentu, aby go wyświetlić
-          setError(error.message);
-        });
+      try {
+        const userCredential = await firebase.auth().signInWithEmailAndPassword(login, password);
+        const user = userCredential.user;
+        console.log("Zalogowano jako:", user.email);
+        setError(null); // Zalogowano pomyślnie, usuń błąd
+      } catch (error) {
+        console.error("Błąd logowania:", error);
+        setError(error.message);
+      }
     });
   }, []);
 
@@ -67,6 +66,7 @@ function Login() {
         </div>
       </div>
       <div id='content' className='flex-container'>
+      <div className="error-message">{error}</div>
         <div id='fourthicon-container'>
           <div className='book-image-container'>
             <img src={book} alt='book' id='fourthicon' />
@@ -74,7 +74,7 @@ function Login() {
             <input id='passInput' type='password'></input>
             <button id='loginButton'>Zaloguj!</button>
             
-            <div className="error-message">{error}</div>}
+            
           </div>
         </div>
       </div>

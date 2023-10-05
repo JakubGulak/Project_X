@@ -15,6 +15,10 @@
   width: 13%; /* Dostosuj szerokość inputa do responsywności */
 }
 
+.error-message{
+  text-align: center;
+}
+
 #passInput {
   position: absolute;
   top: 61%;
