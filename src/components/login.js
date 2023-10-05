@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 import facebook from './facebook.png';
 import instagram from './instagram.png';
 import ckziu from './ckziu.png';
@@ -15,8 +18,35 @@ const firebaseConfig = {
   measurementId: "G-C543MMB5Z0"
 };
 
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 function Login() {
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loginInput = document.getElementById("loginInput");
+    const passInput = document.getElementById("passInput");
+    const loginButton = document.getElementById("loginButton");
+
+    loginButton.addEventListener("click", () => {
+      const login = loginInput.value;
+      const password = passInput.value;
+
+      // Zaloguj użytkownika za pomocą Firebase Authentication
+      firebase.auth().signInWithEmailAndPassword(login, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log("Zalogowano jako:", user.email);
+        })
+        .catch((error) => {
+          // Ustaw błąd w stanie komponentu, aby go wyświetlić
+          setError(error.message);
+        });
+    });
+  }, []);
+
   return (
     <div id='loginHeader'>
       <div id="header">
@@ -43,6 +73,8 @@ function Login() {
             <input id='loginInput'></input>
             <input id='passInput' type='password'></input>
             <button id='loginButton'>Zaloguj!</button>
+            
+            <div className="error-message">{error}</div>}
           </div>
         </div>
       </div>
