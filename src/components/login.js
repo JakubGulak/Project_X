@@ -8,6 +8,7 @@ import ckziu from './ckziu.png';
 import book from './book.png';
 import './login.css';
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyD9cGsHCJl5ciSZlMxLdW-oVq5w9hfc1MM",
   authDomain: "userslibraryckziu.firebaseapp.com",
@@ -73,8 +74,6 @@ function Login() {
             <input id='loginInput'></input>
             <input id='passInput' type='password'></input>
             <button id='loginButton'>Zaloguj!</button>
-            
-            
           </div>
         </div>
       </div>
