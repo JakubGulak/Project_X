@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
@@ -8,7 +9,6 @@ import ckziu from './ckziu.png';
 import book from './book.png';
 import './login.css';
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyD9cGsHCJl5ciSZlMxLdW-oVq5w9hfc1MM",
   authDomain: "userslibraryckziu.firebaseapp.com",
@@ -17,7 +17,7 @@ const firebaseConfig = {
   messagingSenderId: "528770481702",
   appId: "1:528770481702:web:1242274cbcfb9cdf9bb0e7",
   measurementId: "G-C543MMB5Z0"
-}
+};
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
@@ -25,6 +25,7 @@ if (!firebase.apps.length) {
 
 function Login() {
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); // Inicjalizacja useNavigate
 
   useEffect(() => {
     const loginInput = document.getElementById("loginInput");
@@ -39,13 +40,16 @@ function Login() {
         const userCredential = await firebase.auth().signInWithEmailAndPassword(login, password);
         const user = userCredential.user;
         console.log("Zalogowano jako:", user.email);
-        setError(null); // Zalogowano pomyślnie, usuń błąd
+        setError(null);
+        
+        // Przenieś użytkownika do innej strony po zalogowaniu
+        navigate("/private"); // Zakładam, że ścieżka "/private" prowadzi do strony tylko dla zalogowanych
       } catch (error) {
         console.error("Błąd logowania:", error);
         setError(error.message);
       }
     });
-  }, []);
+  }, [navigate]); // Dodaj navigate do zależności
 
   return (
     <div id='loginHeader'>

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Home from './components/home';
 import Main from './components/main';
 import Login from './components/login';
+import Private from './components/private';
 
 function AppRouter() {
   return (
@@ -12,6 +13,7 @@ function AppRouter() {
         <Route path="/main" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Navigate to="/home" />} /> 
+        <Route path="/private" element={<Private />} />
       </Routes>
     </Router>
   );
