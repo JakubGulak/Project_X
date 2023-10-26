@@ -7,6 +7,7 @@ import facebook from './facebook.png';
 import instagram from './instagram.png';
 import ckziu from './ckziu.png';
 import './home.css';
+import Button from 'react-bootstrap/Button';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD9cGsHCJl5ciSZlMxLdW-oVq5w9hfc1MM",
@@ -74,6 +75,7 @@ function LoggedHome() {
             <div>
               <p id='hello'>Witaj, {user.email}!</p>
               <button onClick={handleLogout} id='handlelogout'>Wyloguj się</button>
+              <Button variant="primary">SIEMA</Button>
             </div>
           ) : (
             <a href="/login">Zaloguj się!</a>

@@ -16,7 +16,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 15px;
+    padding-top: 25px;
     background-color: #212121;
 }
 
@@ -45,7 +46,7 @@ a {
     } 
 }
 
-@media (max-width: 850px) {
+@media (max-width: 855px) {
     #header-content {
         margin-top: 0vh;
         flex-direction: column; 
@@ -136,7 +137,9 @@ a {
     color: white;
 }
 
-#handlelogout{
-
+#loga {
+    color: white;
+    text-decoration: none;
+    font-size: large;
 }
 

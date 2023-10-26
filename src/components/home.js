@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
@@ -7,6 +5,8 @@ import facebook from './facebook.png';
 import instagram from './instagram.png';
 import ckziu from './ckziu.png';
 import './home.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Button from 'react-bootstrap/Button';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD9cGsHCJl5ciSZlMxLdW-oVq5w9hfc1MM",
@@ -23,37 +23,6 @@ if (!firebase.apps.length) {
 }
 
 function Home() {
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Sprawdź stan uwierzytelnienia użytkownika po załadowaniu strony
-    const unsubscribe = firebase.auth().onAuthStateChanged((authUser) => {
-      if (authUser) {
-        // Użytkownik jest zalogowany
-        setUser(authUser);
-      } else {
-        // Brak użytkownika zalogowanego
-        setUser(null);
-      }
-    });
-
-    return () => {
-      // Odsubskrybuj zdarzenia, aby uniknąć wycieków pamięci
-      unsubscribe();
-    }
-  }, []);
-
-  const handleLogout = async () => {
-    try {
-      // Wyloguj użytkownika i zakończ sesję
-      await firebase.auth().signOut();
-      navigate('/'); // Przenieś użytkownika na stronę główną po wylogowaniu
-    } catch (error) {
-      console.error("Błąd wylogowania:", error);
-    }
-  };
-
   return (
     <div id='app'>
       <div id="header">
@@ -70,14 +39,7 @@ function Home() {
               </a>
           </div>
           <h1 id='title'>Biblioteka Szkolna CKZiU w Jaworznie</h1>
-          {user ? (
-            <div>
-              <p id='hello'>Witaj, {user.email}!</p>
-              <button onClick={handleLogout}>Wyloguj się</button>
-            </div>
-          ) : (
-            <a href="/login">Zaloguj się!</a>
-          )}
+            <a href="/login" id='loga'>Zaloguj się!</a>
         </div>
       </div>
       <div id='content'></div>
