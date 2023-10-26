@@ -171,3 +171,48 @@
     padding-right: 12%;
   }
 }
+
+@media (max-width: 480px) {
+  #loginInput{
+    top: 53%;
+  }
+  #fourthicon {
+    margin-left: 10%;
+    width: 80vw;
+    height: 50vh;
+  }
+  #loginInput{
+    top: 53%;
+  }
+  #passInput{
+    top: 65%;
+  }
+
+  #loginButton{
+    top: 72%;
+    padding-right: 14%;
+  }
+}
+
+@media (max-width: 440px) {
+  #loginInput{
+    top: 53%;
+  }
+  #fourthicon {
+    margin-left: 10%;
+    width: 80vw;
+    height: 50vh;
+  }
+  #loginInput{
+    top: 53%;
+  }
+  #passInput{
+    top: 65%;
+  }
+
+  #loginButton{
+    top: 72%;
+    padding-right: 15%;
+  }
+}
+
