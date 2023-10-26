@@ -43,7 +43,7 @@ function Login() {
         setError(null);
         
         // Przenieś użytkownika do innej strony po zalogowaniu
-        navigate("/private"); // Zakładam, że ścieżka "/private" prowadzi do strony tylko dla zalogowanych
+        navigate("/loggedhome"); // Zakładam, że ścieżka "/private" prowadzi do strony tylko dla zalogowanych
       } catch (error) {
         console.error("Błąd logowania:", error);
         setError(error.message);
