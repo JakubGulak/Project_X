@@ -15,6 +15,27 @@
   width: 13%; 
 }
 
+#hello {
+  margin: 0;
+}
+
+#logout {
+  padding: 0;
+  margin: 0;
+}
+
+#handlelogout{
+  margin: 0;
+  padding: 2.2%; 
+  margin-left: 15%;
+  color: #212121;
+  background-color: #f4f1de;
+}
+
+#return {
+  color: white;
+}
+
 .error-message{
   text-align: center;
 }
@@ -48,7 +69,7 @@
   }
 
   #passInput{
-    top: 59%;
+    top: 58%;
   }
 
   #loginButton{
@@ -62,7 +83,7 @@
   }
 
   #passInput{
-    top: 55%;
+    top: 53%;
   }
 
   #loginButton{
@@ -70,47 +91,50 @@
   }
 }
 
-@media (max-width: 1150px) {
+@media (max-width: 1180px) {
   #loginInput{
-    top: 38%;
+    top: 39%;
+  }
+  #passInput{
+    top: 50%;
+  }
+  #loginButton{
+    top: 59%;
+  }
+}
+
+@media (max-width: 1120px) {
+  #loginInput{
+    top: 37%;
   }
   #passInput{
     top: 48%;
   }
+
   #loginButton{
-    top: 55%;
+    top: 56%;
   }
 }
 
 @media (max-width: 1050px) {
   #loginInput{
     top: 35%;
+    height: 5%;
   }
   #passInput{
     top: 46%;
+    height: 5%;
   }
 
   #loginButton{
-    top: 52%;
+    top: 54%;
+    height: 7%;
   }
 }
 
 @media (max-width: 950px) {
   #loginInput{
-    top: 31%;
-  }
-  #passInput{
-    top: 41%;
-  }
-
-  #loginButton{
-    top: 47%;
-  }
-}
-
-@media (max-width: 855px) {
-  #loginInput{
-    top: 50%;
+    top: 36%;
     left: 67%;
   }
   #fourthicon {
@@ -118,19 +142,84 @@
     height: 50vh;
   }
   #passInput{
-    top: 60%;
+    top: 48%;
     left: 67%;
   }
 
   #loginButton{
-    top: 67%;
+    top: 56%;
     left: 67%;
   }
 }
 
-@media (max-width: 638px) {
+@media (max-width: 950px) {
   #loginInput{
-    top: 53%;
+    top: 52%;
+    left: 67%;
+  }
+  #fourthicon {
+    width: 60vw;
+    height: 50vh;
+  }
+  #passInput{
+    top: 64%;
+    left: 67%;
+  }
+
+  #loginButton{
+    top: 72%;
+    left: 67%;
+  }
+}
+
+@media (max-width: 825px) {
+  #loginInput{
+    top: 52%;
+    left: 67%;
+  }
+  #fourthicon {
+    width: 60vw;
+    height: 50vh;
+  }
+  #passInput{
+    top: 64%;
+    left: 67%;
+  }
+
+  #loginButton{
+    top: 72%;
+    left: 67%;
+    height: 6%;
+    padding-right: 5%;
+  }
+}
+
+
+@media (max-width: 770px) {
+  #loginInput{
+    top: 51%;
+    left: 67%;
+  }
+  #fourthicon {
+    width: 60vw;
+    height: 50vh;
+  }
+  #passInput{
+    top: 63%;
+    left: 67%;
+  }
+
+  #loginButton{
+    top: 71%;
+    left: 67%;
+    height: 6%;
+    padding-right: 10%;
+  }
+}
+
+@media (max-width: 620px) {
+  #loginInput{
+    top: 50%;
   }
   #fourthicon {
     margin-left: 10%;

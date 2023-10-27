@@ -74,8 +74,9 @@ function LoggedHome() {
           {user ? (
             <div>
               <p id='hello'>Witaj, {user.email}!</p>
-              <button onClick={handleLogout} id='handlelogout'>Wyloguj się</button>
-              <Button variant="primary">SIEMA</Button>
+              <div>
+              <button onClick={handleLogout} id='handlelogout'><p id='logout'>Wyloguj się</p></button>
+              </div>
             </div>
           ) : (
             <a href="/login">Zaloguj się!</a>

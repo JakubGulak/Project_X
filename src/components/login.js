@@ -42,14 +42,13 @@ function Login() {
         console.log("Zalogowano jako:", user.email);
         setError(null);
         
-        // Przenieś użytkownika do innej strony po zalogowaniu
-        navigate("/loggedhome"); // Zakładam, że ścieżka "/private" prowadzi do strony tylko dla zalogowanych
+        navigate("/loggedhome"); 
       } catch (error) {
         console.error("Błąd logowania:", error);
         setError(error.message);
       }
     });
-  }, [navigate]); // Dodaj navigate do zależności
+  }, [navigate]); 
 
   return (
     <div id='loginHeader'>
@@ -67,7 +66,7 @@ function Login() {
               </a>
           </div>
           <h1 id='title'>Biblioteka Szkolna CKZiU w Jaworznie</h1>
-          <a href="/home">← Powrót</a>
+          <a href="/home" id='return'>← Powrót</a>
         </div>
       </div>
       <div id='content' className='flex-container'>
