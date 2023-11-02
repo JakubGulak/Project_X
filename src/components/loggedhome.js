@@ -7,7 +7,6 @@ import facebook from './facebook.png';
 import instagram from './instagram.png';
 import ckziu from './ckziu.png';
 import './home.css';
-import Button from 'react-bootstrap/Button';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD9cGsHCJl5ciSZlMxLdW-oVq5w9hfc1MM",
