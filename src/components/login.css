@@ -15,6 +15,12 @@
   width: 13%; 
 }
 
+.error-message {
+  color: red;
+  font-size: large;
+}
+
+
 #hello {
   margin: 0;
 }

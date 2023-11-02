@@ -45,7 +45,7 @@ function Login() {
         navigate("/loggedhome"); 
       } catch (error) {
         console.error("Błąd logowania:", error);
-        setError(error.message);
+        setError("Podane złe dane logowania. Spróbuj ponownie.");
       }
     });
   }, [navigate]); 
