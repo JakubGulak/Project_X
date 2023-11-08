@@ -2,8 +2,31 @@
     margin-top: 5vh;
     background-color: #f4f1de;
     width: 100%;
-    height: 90.5vh;
+    height: 100%;
 }
+
+
+.article {
+    margin: 20px;
+    display: inline-block;
+  }
+  
+  .article-container {
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .article-image {
+    max-width: 40%;
+    height: auto;
+    margin: 0 10px; /* Dodaj margines z lewej i prawej strony */
+  }
+  
+  
+  .article-title {
+    margin-top: 10px;
+  }
+  
 
 #header {
     background-color: #212121;

@@ -4,6 +4,9 @@ import 'firebase/compat/firestore';
 import facebook from './facebook.png';
 import instagram from './instagram.png';
 import ckziu from './ckziu.png';
+import library from './library.jpg'
+import book from './book.jpg'
+import { Link } from 'react-router-dom'; // Import React Router
 import './home.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -22,6 +25,19 @@ if (!firebase.apps.length) {
 }
 
 function Home() {
+
+  const articles = [
+    {
+      title: 'Biblioteka w CKZiU najlepsza na Śląsku!',
+      image: library,
+      link: '/article1',
+    },
+    {
+      title: 'Najczęściej wypożyczane książki tego roku!',
+      image: book,
+      link: '/article2',
+    },
+  ];
   return (
     <div id='app'>
       <div id="header">
@@ -41,7 +57,19 @@ function Home() {
             <a href="/login" id='loga'>Zaloguj się!</a>
         </div>
       </div>
-      <div id='content'></div>
+      <div id='content'>
+      {articles.map((article, index) => (
+          <div key={index} className="article">
+            <div className="article-container">
+              <img src={article.image} alt={article.title} className="article-image" />
+              <h2 className="article-title">{article.title}</h2>
+              <Link to={article.link} className="read-more-link">
+                Czytaj więcej
+              </Link>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
