@@ -24,31 +24,44 @@ if (!firebase.apps.length) {
 
 function LoggedHome() {
   const [user, setUser] = useState(null);
+  const [books, setBooks] = useState([]);
   const navigate = useNavigate();
 
+  const getBooksFromFirebase = async () => {
+    const db = firebase.firestore();
+    const booksCollection = db.collection('books');
+
+    try {
+      const querySnapshot = await booksCollection.get();
+      const booksData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setBooks(booksData);
+    } catch (error) {
+      console.error('Błąd pobierania danych z bazy danych:', error);
+    }
+  };
+
   useEffect(() => {
-    // Sprawdź stan uwierzytelnienia użytkownika po załadowaniu strony
     const unsubscribe = firebase.auth().onAuthStateChanged((authUser) => {
       if (authUser) {
-        // Użytkownik jest zalogowany
         setUser(authUser);
+        getBooksFromFirebase();
       } else {
-        // Brak użytkownika zalogowanego
         setUser(null);
       }
     });
 
     return () => {
-      // Odsubskrybuj zdarzenia, aby uniknąć wycieków pamięci
       unsubscribe();
-    }
+    };
   }, []);
 
   const handleLogout = async () => {
     try {
-      // Wyloguj użytkownika i zakończ sesję
       await firebase.auth().signOut();
-      navigate('/'); // Przenieś użytkownika na stronę główną po wylogowaniu
+      navigate('/');
     } catch (error) {
       console.error("Błąd wylogowania:", error);
     }
