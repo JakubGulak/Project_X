@@ -5,6 +5,10 @@
     height: 100%;
 }
 
+h1#title {
+    margin-top: 0.7%;
+}
+
 
 .article {
     margin: 20px;
@@ -19,7 +23,7 @@
   .article-image {
     max-width: 40%;
     height: auto;
-    margin: 0 10px; /* Dodaj margines z lewej i prawej strony */
+    margin: 0 10px;
   }
   
   
@@ -27,11 +31,15 @@
     margin-top: 10px;
   }
   
+a#loga {
+    font-size: 2.5vh;
+}
 
 #header {
     background-color: #212121;
     width: 100%;
     height: 7vh;
+    font-size: 2.5vh;
 }
 
 #header-content {

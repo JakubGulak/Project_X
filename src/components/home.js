@@ -6,7 +6,7 @@ import instagram from './instagram.png';
 import ckziu from './ckziu.png';
 import library from './library.jpg'
 import book from './book.jpg'
-import { Link } from 'react-router-dom'; // Import React Router
+import { Link } from 'react-router-dom'; 
 import './home.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 

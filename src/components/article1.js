@@ -2,7 +2,7 @@ function Article1() {
 
     return (
       <div>
-        <h1>asdsadsadsadBiblioteka Szkolna</h1>
+        <h1>Article 1</h1>
       </div>
     );
   }
