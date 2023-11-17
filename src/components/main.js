@@ -1,5 +1,3 @@
-// Main.js
-
 function Main() {
 
   return (

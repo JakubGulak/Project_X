@@ -25,7 +25,7 @@ if (!firebase.apps.length) {
 
 function Login() {
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // Inicjalizacja useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loginInput = document.getElementById("loginInput");
