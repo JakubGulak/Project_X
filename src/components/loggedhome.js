@@ -9,21 +9,24 @@ import ckziu from './ckziu.png';
 import './loggedhome.css';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCmEpLni3odJKcN9CrTqKaKxIu_tu4LBR8",
-  authDomain: "libraryckziu.firebaseapp.com",
-  projectId: "libraryckziu",
-  storageBucket: "libraryckziu.appspot.com",
-  messagingSenderId: "109161048917",
-  appId: "1:109161048917:web:7be4751f529e97175a1ddc",
-  measurementId: "G-EZLM6V2WPN"
+  apiKey: "AIzaSyBDt-Q1iOKptq2Nia6pePJWfIV5NWuM7RI",
+  authDomain: "booksckziu.firebaseapp.com",
+  projectId: "booksckziu",
+  storageBucket: "booksckziu.appspot.com",
+  messagingSenderId: "1013482357146",
+  appId: "1:1013482357146:web:e24296d8281115f36f7a23",
+  measurementId: "G-LW2RSNZ647"
 };
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
+const firestore = firebase.firestore(); // Inicjalizujemy Firestore
+
 function LoggedHome() {
   const [user, setUser] = useState(null);
+  const [books, setBooks] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,7 +43,6 @@ function LoggedHome() {
     };
   }, []);
 
-
   const handleLogout = async () => {
     try {
       await firebase.auth().signOut();
@@ -50,41 +52,61 @@ function LoggedHome() {
     }
   };
 
- // ... poprzedni kod
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const snapshot = await firestore.collection('books').get();
+        const booksData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setBooks(booksData);
+        console.log('Dane z bazy danych:', booksData);
+      } catch (error) {
+        console.error('Błąd podczas pobierania danych z bazy danych:', error);
+      }
+    };
+  
+    fetchData();
+  }, []); 
 
-return (
-  <div id='app'>
-    <div id="header">
-      <div id="header-content">
-        <div id='icons'>
-          <a href="https://www.ckziu.jaworzno.pl/" target="_blank" rel="noopener noreferrer">
-            <img src={ckziu} alt="Ckziu" id='firsticon' />
-          </a>
-          <a href="https://www.facebook.com/elektrownia.ckziu/?locale=pl_PL" target="_blank" rel="noopener noreferrer">
-            <img src={facebook} alt="Facebook" id='secondicon' />
-          </a>
-          <a href="https://www.instagram.com/elektrownia_jaworzno/" target="_blank" rel="noopener noreferrer">
-            <img src={instagram} alt="Instagram" id='thirdicon' />
-          </a>
-        </div>
-        <h1 id='title'>Biblioteka Szkolna CKZiU w Jaworznie</h1>
-        {user ? (
-          <div>
-            <p id='hello'>Witaj, {user.email}!</p>
-            <div>
-              <button onClick={handleLogout} id='handlelogout'><p id='logout'>Wyloguj się</p></button>
-            </div>
+  return (
+    <div id='app'>
+      <div id="header">
+        <div id="header-content">
+          <div id='icons'>
+            <a href="https://www.ckziu.jaworzno.pl/" target="_blank" rel="noopener noreferrer">
+              <img src={ckziu} alt="Ckziu" id='firsticon' />
+            </a>
+            <a href="https://www.facebook.com/elektrownia.ckziu/?locale=pl_PL" target="_blank" rel="noopener noreferrer">
+              <img src={facebook} alt="Facebook" id='secondicon' />
+            </a>
+            <a href="https://www.instagram.com/elektrownia_jaworzno/" target="_blank" rel="noopener noreferrer">
+              <img src={instagram} alt="Instagram" id='thirdicon' />
+            </a>
           </div>
-        ) : (
-          <a href="/login">Zaloguj się!</a>
-        )}
+          <h1 id='title'>Biblioteka Szkolna CKZiU w Jaworznie</h1>
+          {user ? (
+            <div>
+              <p id='hello'>Witaj, {user.email}!</p>
+              <div>
+                <button onClick={handleLogout} id='handlelogout'><p id='logout'>Wyloguj się</p></button>
+              </div>
+            </div>
+          ) : (
+            <a href="/login">Zaloguj się!</a>
+          )}
+        </div>
+      </div>
+      <div id='content'>
+        <h2>Dostępne książki:</h2>
+        <ul>
+          {books.map(book => (
+            <li key={book.id}>
+              <strong>{book.title}</strong> by {book.author}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
-    <div id='content'>
-      <h2>Dostępne książki:</h2>
-    </div>
-  </div>
-);
+  );
 }
 
 export default LoggedHome;
