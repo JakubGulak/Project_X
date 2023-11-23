@@ -25,7 +25,6 @@ if (!firebase.apps.length) {
 function LoggedHome() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
-  const [books, setBooks] = useState([]);
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged(async (authUser) => {
@@ -36,51 +35,11 @@ function LoggedHome() {
       }
     });
 
-    const createSampleBook = async () => {
-      try {
-        const collectionRef = firebase.firestore().collection('booksss');
-        
-        // Sprawdź, czy kolekcja już istnieje
-        const collectionSnapshot = await collectionRef.get();
-
-        if (collectionSnapshot.empty) {
-          console.log('Tworzenie kolekcji "books"...');
-
-          // Dodaj przykładową książkę do kolekcji
-          await collectionRef.add({
-            Author: 'Michał',
-            Title: 'Siema',
-          });
-
-          console.log('Kolekcja "books" została utworzona, a przykładowa książka została dodana.');
-        } else {
-          console.log('Kolekcja "books" już istnieje.');
-        }
-      } catch (error) {
-        console.error('Błąd podczas tworzenia kolekcji i dodawania książki:', error);
-      }
-    };
-
-    createSampleBook();
-
-    const fetchBooks = async () => {
-      try {
-        const booksCollection = await firebase.firestore().collection('booksss').get();
-        const booksData = booksCollection.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        console.log('Pobrane dane z Firestore:', booksData);
-
-        setBooks(booksData);
-      } catch (error) {
-        console.error('Błąd pobierania danych z Firestore:', error);
-      }
-    };
-
-    fetchBooks();
-
     return () => {
       unsubscribe();
     };
   }, []);
+
 
   const handleLogout = async () => {
     try {
@@ -123,14 +82,9 @@ return (
     </div>
     <div id='content'>
       <h2>Dostępne książki:</h2>
-      {books.map((book, index) => (
-        <div key={index}>
-          <p>Autor: {book.Author}</p>
-          <p>Tytuł: {book.Title}</p>
-        </div>
-      ))}
     </div>
   </div>
 );
-      }
+}
+
 export default LoggedHome;
