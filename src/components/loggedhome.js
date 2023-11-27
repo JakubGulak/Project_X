@@ -96,17 +96,41 @@ function LoggedHome() {
         </div>
       </div>
       <div id='content'>
-        <h2>Dostępne książki:</h2>
-        <ul>
-          {books.map(book => (
-            <li key={book.id}>
-              <strong>{book.title}</strong> by {book.author}
-            </li>
-          ))}
-        </ul>
+        <h2>Książki w bibliotece:</h2>
+        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '15px' }}>
+          <thead>
+            <tr style={{ backgroundColor: '#f2f2f2' }}>
+              <th style={tableHeaderStyle}>ID</th>
+              <th style={tableHeaderStyle}>Autor</th>
+              <th style={tableHeaderStyle}>Tytuł książki</th>
+              <th style={tableHeaderStyle}>Dostępność</th>
+            </tr>
+          </thead>
+          <tbody>
+            {books.map(book => (
+              <tr key={book.ID} style={{ borderBottom: '1px solid #ddd' }}>
+                <td style={tableCellStyle}>{book.ID}</td>
+                <td style={tableCellStyle}>{book.author}</td>
+                <td style={tableCellStyle}>{book.title}</td>
+                <td style={tableCellStyle}>{book.availability ? 'Tak' : 'Nie'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
 }
+
+const tableHeaderStyle = {
+  padding: '10px',
+  textAlign: 'left',
+  borderBottom: '1px solid #ddd',
+};
+
+const tableCellStyle = {
+  padding: '10px',
+  textAlign: 'left',
+};
 
 export default LoggedHome;

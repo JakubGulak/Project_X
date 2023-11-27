@@ -1,4 +1,3 @@
-import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import facebook from './facebook.png';
@@ -10,19 +9,6 @@ import { Link } from 'react-router-dom';
 import './home.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyD9cGsHCJl5ciSZlMxLdW-oVq5w9hfc1MM",
-  authDomain: "userslibraryckziu.firebaseapp.com",
-  projectId: "userslibraryckziu",
-  storageBucket: "userslibraryckziu.appspot.com",
-  messagingSenderId: "528770481702",
-  appId: "1:528770481702:web:1242274cbcfb9cdf9bb0e7",
-  measurementId: "G-C543MMB5Z0"
-};
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
 
 function Home() {
 
