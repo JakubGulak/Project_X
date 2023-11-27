@@ -52,6 +52,49 @@ function LoggedHome() {
     }
   };
 
+  const rentBook = async (bookId) => {
+    try {
+      // Sprawdź dostępność książki przed próbą wypożyczenia
+      const bookRef = firestore.collection('books').doc(bookId);
+      const bookSnapshot = await bookRef.get();
+
+      if (bookSnapshot.exists) {
+        const bookData = bookSnapshot.data();
+        if (bookData.availability) {
+          // Oznacz książkę jako niedostępną po wypożyczeniu
+          await bookRef.update({ availability: false });
+          console.log("Książka została wypożyczona!");
+        } else {
+          console.log("Książka jest już wypożyczona.");
+        }
+      } else {
+        console.log("Książka nie istnieje.");
+      }
+    } catch (error) {
+      console.error('Błąd podczas wypożyczania książki:', error);
+    }
+  };
+
+  const addBook = async () => {
+    try {
+      const newBook = {
+        ID: 6,
+        author: "Nicholas Sparks",
+        title: "Pamiętnik",
+        category: "Romans",
+        availability: false,  // Ustaw dostępność na true lub false
+      };
+
+      // Dodaj nową książkę do bazy danych
+      const docRef = await firestore.collection('books').add(newBook);
+
+      // Pobierz ID nowo utworzonego dokumentu (jeśli potrzebujesz)
+      console.log("Nowa książka została dodana z ID:", docRef.id);
+    } catch (error) {
+      console.error('Błąd podczas dodawania książki do bazy danych:', error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -104,6 +147,7 @@ function LoggedHome() {
               <th style={tableHeaderStyle}>Autor</th>
               <th style={tableHeaderStyle}>Tytuł książki</th>
               <th style={tableHeaderStyle}>Dostępność</th>
+              <th style={tableHeaderStyle}>Akcje</th>
             </tr>
           </thead>
           <tbody>
@@ -112,11 +156,17 @@ function LoggedHome() {
                 <td style={tableCellStyle}>{book.ID}</td>
                 <td style={tableCellStyle}>{book.author}</td>
                 <td style={tableCellStyle}>{book.title}</td>
-                <td style={tableCellStyle}>{book.availability ? 'Tak' : 'Nie'}</td>
+                <td style={tableCellStyle}>{book.availability ? '✅' : '❌'}</td>
+                <td style={tableCellStyle}>
+                  {book.availability && (
+                    <button onClick={() => rentBook(book.ID)}>Zarezerwuj!</button>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <button onClick={addBook}>Dodaj nową książkę</button>
       </div>
     </div>
   );
