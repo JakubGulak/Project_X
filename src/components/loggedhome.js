@@ -26,11 +26,28 @@ const firestore = firebase.firestore();
 
 function LoggedHome() {
   const [user, setUser] = useState(null);
+  const [userBooks, setUserBooks] = useState([]);
   const [showAvailableOnly, setShowAvailableOnly] = useState(false);
   const [allBooks, setAllBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserBooks = async () => {
+      try {
+        const snapshot = await firestore.collection('reservations').where('userId', '==', user.uid).get();
+        const userBooksData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setUserBooks(userBooksData);
+      } catch (error) {
+        console.error('Błąd podczas pobierania danych o książkach użytkownika:', error);
+      }
+    };
+
+    if (user) {
+      fetchUserBooks();
+    }
+  }, [user]);
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged(async (authUser) => {
@@ -93,22 +110,15 @@ function LoggedHome() {
 
   const rentBook = async (bookId) => {
     try {
-      const bookRef = firestore.collection('books').doc(bookId);
+      console.log('Próba rezerwacji książki o ID:', bookId);
+      const bookRef = firestore.collection('books').doc(String(bookId));
       const bookSnapshot = await bookRef.get();
-
+  
+      console.log('Snapshot książki:', bookSnapshot);
+  
       if (bookSnapshot.exists) {
         const bookData = bookSnapshot.data();
-        if (bookData.availability) {
-          await firestore.collection('reservations').add({
-            userId: user.uid,
-            bookId,
-            reservationDate: new Date(),
-          });
-          await bookRef.update({ availability: false });
-          console.log("Książka została zarezerwowana!");
-        } else {
-          console.log("Książka jest już zarezerwowana.");
-        }
+        console.log('Tytuł książki:', bookData.title);
       } else {
         console.log("Książka nie istnieje.");
       }
@@ -116,6 +126,11 @@ function LoggedHome() {
       console.error('Błąd podczas rezerwacji książki:', error);
     }
   };
+  
+  
+  
+  
+  
 
   const handleCheckboxChange = () => {
     setShowAvailableOnly(!showAvailableOnly);
@@ -169,8 +184,8 @@ function LoggedHome() {
       </div>
       <div id='content'>
         <div id='menu' style={{ display: 'flex', fontSize: 25, alignItems: 'center', justifyContent: 'space-between', marginLeft: 20, marginRight: 20, fontWeight: 'bold' }}>
-          <p>Historia wypożyczeń</p>
-          <p>Twoje książki</p>
+        <p>Historia wypożyczeń</p>
+        <p>Twoje książki ({userBooks.length})</p>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
             <input
               type='text'
@@ -212,7 +227,7 @@ function LoggedHome() {
                 </td>
                 <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>
                   {book.availability && (
-                    <button onClick={() => rentBook(book.ID)}>Zarezerwuj!</button>
+                    <button onClick={() => rentBook(book.id)}>Zarezerwuj!</button>
                   )}
                 </td>
               </tr>
