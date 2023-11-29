@@ -26,6 +26,7 @@ const firestore = firebase.firestore();
 
 function LoggedHome() {
   const [user, setUser] = useState(null);
+  const [showAvailableOnly, setShowAvailableOnly] = useState(false);
   const [allBooks, setAllBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -70,6 +71,17 @@ function LoggedHome() {
     );
   }, [searchTerm, allBooks]);
 
+  useEffect(() => {
+    setFilteredBooks(
+      allBooks.filter(book => 
+        (book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.title.toLowerCase().includes(searchTerm.toLowerCase())) &&
+        (!showAvailableOnly || book.availability)
+      )
+    );
+  }, [searchTerm, allBooks, showAvailableOnly]);
+  
+
   const handleLogout = async () => {
     try {
       await firebase.auth().signOut();
@@ -104,6 +116,11 @@ function LoggedHome() {
       console.error('Błąd podczas rezerwacji książki:', error);
     }
   };
+
+  const handleCheckboxChange = () => {
+    setShowAvailableOnly(!showAvailableOnly);
+  };
+  
 
   // const addBook = async () => {
   //   try {
@@ -154,12 +171,22 @@ function LoggedHome() {
         <div id='menu' style={{ display: 'flex', fontSize: 25, alignItems: 'center', justifyContent: 'space-between', marginLeft: 20, marginRight: 20, fontWeight: 'bold' }}>
           <p>Historia wypożyczeń</p>
           <p>Twoje książki</p>
-          <input
-            type='text'
-            placeholder='Wyszukaj książki...'
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <input
+              type='text'
+              placeholder='Wyszukaj książki...'
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <div style={{ marginTop: '5px' }}>
+              <input
+                type="checkbox"
+                checked={showAvailableOnly}
+                onChange={handleCheckboxChange}
+              />
+              <label style={{ marginLeft: '5px', fontSize: '14px' }}>Pokaż tylko dostępne książki</label>
+            </div>
+          </div>
         </div>
         <h2 id='tit' style={{ textAlign: 'center' }}>Książki w bibliotece:</h2>
         <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '15px' }}>
