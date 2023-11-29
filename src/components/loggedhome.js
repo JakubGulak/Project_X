@@ -105,22 +105,22 @@ function LoggedHome() {
     }
   };
 
-  const addBook = async () => {
-    try {
-      const newBook = {
-        ID: 7,
-        author: "Barfety Elisabeth",
-        title: "Baletnice. Przyjaciółki i rywalki",
-        category: "Dla dzieci",
-        availability: true,
-      };
+  // const addBook = async () => {
+  //   try {
+  //     const newBook = {
+  //       ID: 8,
+  //       author: "Sofokles",
+  //       title: "Król Edyp",
+  //       category: "Lektura",
+  //       availability: false,
+  //     };
 
-      const docRef = await firestore.collection('books').add(newBook);
-      console.log("Nowa książka została dodana z ID:", docRef.id);
-    } catch (error) {
-      console.error('Błąd podczas dodawania książki do bazy danych:', error);
-    }
-  };
+  //     const docRef = await firestore.collection('books').add(newBook);
+  //     console.log("Nowa książka została dodana z ID:", docRef.id);
+  //   } catch (error) {
+  //     console.error('Błąd podczas dodawania książki do bazy danych:', error);
+  //   }
+  // };
 
   return (
     <div id='app'>
@@ -192,7 +192,7 @@ function LoggedHome() {
             ))}
           </tbody>
         </table>
-        <button onClick={addBook}>Dodaj nową książkę</button>
+        {/* <button onClick={addBook}>Dodaj nową książkę</button> */}
       </div>
     </div>
   );
