@@ -9,24 +9,26 @@ import ckziu from './ckziu.png';
 import './loggedhome.css';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBDt-Q1iOKptq2Nia6pePJWfIV5NWuM7RI",
-  authDomain: "booksckziu.firebaseapp.com",
-  projectId: "booksckziu",
-  storageBucket: "booksckziu.appspot.com",
-  messagingSenderId: "1013482357146",
-  appId: "1:1013482357146:web:e24296d8281115f36f7a23",
-  measurementId: "G-LW2RSNZ647"
+  apiKey: "AIzaSyD9cGsHCJl5ciSZlMxLdW-oVq5w9hfc1MM",
+  authDomain: "userslibraryckziu.firebaseapp.com",
+  projectId: "userslibraryckziu",
+  storageBucket: "userslibraryckziu.appspot.com",
+  messagingSenderId: "528770481702",
+  appId: "1:528770481702:web:1242274cbcfb9cdf9bb0e7",
+  measurementId: "G-C543MMB5Z0"
 };
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-const firestore = firebase.firestore(); // Inicjalizujemy Firestore
+const firestore = firebase.firestore();
 
 function LoggedHome() {
   const [user, setUser] = useState(null);
-  const [books, setBooks] = useState([]);
+  const [allBooks, setAllBooks] = useState([]);
+  const [filteredBooks, setFilteredBooks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,6 +45,31 @@ function LoggedHome() {
     };
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const snapshot = await firestore.collection('books').get();
+        const booksData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setAllBooks(booksData);
+        setFilteredBooks(booksData);
+        console.log('Dane z bazy danych:', booksData);
+      } catch (error) {
+        console.error('Błąd podczas pobierania danych z bazy danych:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    setFilteredBooks(
+      allBooks.filter(book => 
+        book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.title.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+  }, [searchTerm, allBooks]);
+
   const handleLogout = async () => {
     try {
       await firebase.auth().signOut();
@@ -54,24 +81,27 @@ function LoggedHome() {
 
   const rentBook = async (bookId) => {
     try {
-      // Sprawdź dostępność książki przed próbą wypożyczenia
       const bookRef = firestore.collection('books').doc(bookId);
       const bookSnapshot = await bookRef.get();
 
       if (bookSnapshot.exists) {
         const bookData = bookSnapshot.data();
         if (bookData.availability) {
-          // Oznacz książkę jako niedostępną po wypożyczeniu
+          await firestore.collection('reservations').add({
+            userId: user.uid,
+            bookId,
+            reservationDate: new Date(),
+          });
           await bookRef.update({ availability: false });
-          console.log("Książka została wypożyczona!");
+          console.log("Książka została zarezerwowana!");
         } else {
-          console.log("Książka jest już wypożyczona.");
+          console.log("Książka jest już zarezerwowana.");
         }
       } else {
         console.log("Książka nie istnieje.");
       }
     } catch (error) {
-      console.error('Błąd podczas wypożyczania książki:', error);
+      console.error('Błąd podczas rezerwacji książki:', error);
     }
   };
 
@@ -82,33 +112,15 @@ function LoggedHome() {
         author: "Nicholas Sparks",
         title: "Pamiętnik",
         category: "Romans",
-        availability: false,  // Ustaw dostępność na true lub false
+        availability: false,
       };
 
-      // Dodaj nową książkę do bazy danych
       const docRef = await firestore.collection('books').add(newBook);
-
-      // Pobierz ID nowo utworzonego dokumentu (jeśli potrzebujesz)
       console.log("Nowa książka została dodana z ID:", docRef.id);
     } catch (error) {
       console.error('Błąd podczas dodawania książki do bazy danych:', error);
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const snapshot = await firestore.collection('books').get();
-        const booksData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setBooks(booksData);
-        console.log('Dane z bazy danych:', booksData);
-      } catch (error) {
-        console.error('Błąd podczas pobierania danych z bazy danych:', error);
-      }
-    };
-  
-    fetchData();
-  }, []); 
 
   return (
     <div id='app'>
@@ -139,7 +151,17 @@ function LoggedHome() {
         </div>
       </div>
       <div id='content'>
-        <h2>Książki w bibliotece:</h2>
+        <div id='menu' style={{ display: 'flex', fontSize: 25, alignItems: 'center', justifyContent: 'space-between', marginLeft: 20, marginRight: 20, fontWeight: 'bold' }}>
+          <p>Historia wypożyczeń</p>
+          <p>Twoje książki</p>
+          <input
+            type='text'
+            placeholder='Wyszukaj książki...'
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <h2 id='tit' style={{ textAlign: 'center' }}>Książki w bibliotece:</h2>
         <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '15px' }}>
           <thead>
             <tr style={{ backgroundColor: '#f2f2f2' }}>
@@ -151,7 +173,7 @@ function LoggedHome() {
             </tr>
           </thead>
           <tbody>
-            {books.map(book => (
+            {filteredBooks.map(book => (
               <tr key={book.ID} style={{ borderBottom: '1px solid #ddd' }}>
                 <td style={tableCellStyle}>{book.ID}</td>
                 <td style={tableCellStyle}>{book.author}</td>
