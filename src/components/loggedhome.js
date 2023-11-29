@@ -108,11 +108,11 @@ function LoggedHome() {
   const addBook = async () => {
     try {
       const newBook = {
-        ID: 6,
-        author: "Nicholas Sparks",
-        title: "Pamiętnik",
-        category: "Romans",
-        availability: false,
+        ID: 7,
+        author: "Barfety Elisabeth",
+        title: "Baletnice. Przyjaciółki i rywalki",
+        category: "Dla dzieci",
+        availability: true,
       };
 
       const docRef = await firestore.collection('books').add(newBook);
@@ -165,21 +165,25 @@ function LoggedHome() {
         <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '15px' }}>
           <thead>
             <tr style={{ backgroundColor: '#f2f2f2' }}>
-              <th style={tableHeaderStyle}>ID</th>
-              <th style={tableHeaderStyle}>Autor</th>
-              <th style={tableHeaderStyle}>Tytuł książki</th>
-              <th style={tableHeaderStyle}>Dostępność</th>
-              <th style={tableHeaderStyle}>Akcje</th>
+              <th style={{ ...tableHeaderStyle, textAlign: 'center', verticalAlign: 'middle' }}>ID</th>
+              <th style={{ ...tableHeaderStyle, textAlign: 'center', verticalAlign: 'middle' }}>Autor</th>
+              <th style={{ ...tableHeaderStyle, textAlign: 'center', verticalAlign: 'middle' }}>Tytuł książki</th>
+              <th style={{ ...tableHeaderStyle, textAlign: 'center', verticalAlign: 'middle' }}>Kategoria</th>
+              <th style={{ ...tableHeaderStyle, textAlign: 'center', verticalAlign: 'middle' }}>Dostępność</th>
+              <th style={{ ...tableHeaderStyle, textAlign: 'center', verticalAlign: 'middle' }}>Akcje</th>
             </tr>
           </thead>
           <tbody>
             {filteredBooks.map(book => (
               <tr key={book.ID} style={{ borderBottom: '1px solid #ddd' }}>
-                <td style={tableCellStyle}>{book.ID}</td>
-                <td style={tableCellStyle}>{book.author}</td>
-                <td style={tableCellStyle}>{book.title}</td>
-                <td style={tableCellStyle}>{book.availability ? '✅' : '❌'}</td>
-                <td style={tableCellStyle}>
+                <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{book.ID}</td>
+                <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{book.author}</td>
+                <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{book.title}</td>
+                <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{book.category}</td>
+                <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>
+                  {book.availability ? '✅' : '❌'}
+                </td>
+                <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>
                   {book.availability && (
                     <button onClick={() => rentBook(book.ID)}>Zarezerwuj!</button>
                   )}
