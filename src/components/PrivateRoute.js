@@ -1,4 +1,5 @@
 import { Route, Navigate } from 'react-router-dom';
+import LoggedHome from './loggedhome';
 
 // Komponent, który sprawdza, czy użytkownik jest zalogowany
 const PrivateRoute = ({ element, isAuth }) => {
@@ -14,6 +15,7 @@ function AppRouter({ isAuth }) {
       <PrivateRoute path="/loggedhome" element={<LoggedHome />} isAuth={isAuth} />
       <Route path="/login" element={<Login />} />
       <Route path="/" element={<Navigate to="/home" />} />
+      
     </Routes>
   );
 }
