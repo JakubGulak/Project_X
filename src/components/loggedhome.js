@@ -26,29 +26,28 @@ const firestore = firebase.firestore();
 
 function LoggedHome() {
   const [user, setUser] = useState(null);
-  const [userBooks, setUserBooks] = useState([]);
+  // const [userBooks, setUserBooks] = useState([]);
   const [showAvailableOnly, setShowAvailableOnly] = useState(false);
   const [allBooks, setAllBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [returnDate, setReturnDate] = useState(null);
 
+  const showBookDetails = (book) => {
+    setSelectedBook(book);
+    // Calculate the return date (14 days from now)
+    const today = new Date();
+    const returnDate = new Date(today);
+    returnDate.setDate(today.getDate() + 14);
+    setReturnDate(returnDate);
+  };
 
-  useEffect(() => {
-    const fetchUserBooks = async () => {
-      try {
-        const snapshot = await firestore.collection('reservations').where('userId', '==', user.uid).get();
-        const userBooksData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setUserBooks(userBooksData);
-      } catch (error) {
-        console.error('Błąd podczas pobierania danych o książkach użytkownika:', error);
-      }
-    };
-
-    if (user) {
-      fetchUserBooks();
-    }
-  }, [user]);
+  // Function to close the book details modal or section
+  const closeBookDetails = () => {
+    setSelectedBook(null);
+  };
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged(async (authUser) => {
@@ -109,27 +108,26 @@ function LoggedHome() {
     }
   };
 
-  const rentBook = async (bookId, bookTitle) => {
-    try {
-      console.log('Próba rezerwacji książki o ID:', bookId);
-      const bookRef = firestore.collection('books').doc(String(bookId));
-      const bookSnapshot = await bookRef.get();
+  // const rentBook = async (bookId) => {
+  //   try {
+  //     console.log('Próba rezerwacji książki o ID:', bookId);
+  //     const bookRef = firestore.collection('books').doc(String(bookId));
+  //     const bookSnapshot = await bookRef.get();
   
-      console.log('Snapshot książki:', bookSnapshot);
-  
-      if (bookSnapshot.exists) {
-        const bookData = bookSnapshot.data();
-        console.log('Tytuł książki:', bookData.title);
-  
-        // Przekieruj do strony Mybooks, przekazując tytuł książki
-        navigate('/mybooks', { state: { bookTitle: bookData.title } });
-      } else {
-        console.log("Książka nie istnieje.");
-      }
-    } catch (error) {
-      console.error('Błąd podczas rezerwacji książki:', error);
-    }
-  };
+  //     if (bookSnapshot.exists) {
+  //       const bookData = bookSnapshot.data();
+  //       console.log('ID książki:', bookData.ID);
+  //       console.log('Tytuł książki:', bookData.title);
+  //       console.log('Autor książki:', bookData.author);
+  //       console.log('Kategoria książki:', bookData.category);
+  //       console.log('Dostępność książki:', bookData.availability);
+  //     } else {
+  //       console.log("Książka nie istnieje.");
+  //     }
+  //   } catch (error) {
+  //     console.error('Błąd podczas rezerwacji książki:', error);
+  //   }
+  // };
   
   
   
@@ -188,8 +186,8 @@ function LoggedHome() {
       </div>
       <div id='content'>
         <div id='menu' style={{ display: 'flex', fontSize: 25, alignItems: 'center', justifyContent: 'space-between', marginLeft: 20, marginRight: 20, fontWeight: 'bold' }}>
-        <a href='/loggedhome'>Zarezerwuj książke</a>
-        <a href='/mybooks'>Moje książki ({userBooks.length})</a>
+        <a href='/loggedhome'>Książki w bibliotece</a>
+        <a href='/loggedhome'>Moje książki</a>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
             <input
               type='text'
@@ -207,6 +205,32 @@ function LoggedHome() {
             </div>
           </div>
         </div>
+        {selectedBook && (
+          <div className="book-details-modal">
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '15px' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#f2f2f2' }}>
+                  <th style={{ ...tableHeaderStyle, textAlign: 'center', verticalAlign: 'middle' }}>ID</th>
+                  <th style={{ ...tableHeaderStyle, textAlign: 'center', verticalAlign: 'middle' }}>Autor</th>
+                  <th style={{ ...tableHeaderStyle, textAlign: 'center', verticalAlign: 'middle' }}>Tytuł książki</th>
+                  <th style={{ ...tableHeaderStyle, textAlign: 'center', verticalAlign: 'middle' }}>Kategoria</th>
+                  <th style={{ ...tableHeaderStyle, textAlign: 'center', verticalAlign: 'middle' }}>Data oddania</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr key={selectedBook.ID} style={{ borderBottom: '1px solid #ddd' }}>
+                  <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{selectedBook.ID}</td>
+                  <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{selectedBook.author}</td>
+                  <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{selectedBook.title}</td>
+                  <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{selectedBook.category}</td>
+                  <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{returnDate && returnDate.toISOString().split('T')[0]}</td>
+                </tr>
+              </tbody>
+            </table>
+            {/* Add any other book details you want to display */}
+            <button onClick={closeBookDetails}>Zamknij</button>
+          </div>
+        )}
         <h2 id='tit' style={{ textAlign: 'center' }}>Książki w bibliotece:</h2>
         <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '15px' }}>
           <thead>
@@ -230,14 +254,15 @@ function LoggedHome() {
                   {book.availability ? '✅' : '❌'}
                 </td>
                 <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>
-                {book.availability && (
-        <button onClick={() => rentBook(book.id, book.title)}>Zarezerwuj!</button>
-      )}
+                  {book.availability && (
+                    <button onClick={() => showBookDetails(book)}>Zarezerwuj!</button>
+                  )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        
         {/* <button onClick={addBook}>Dodaj nową książkę</button> */}
       </div>
     </div>
