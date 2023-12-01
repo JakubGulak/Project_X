@@ -6,6 +6,7 @@ import Login from './components/login';
 import LoggedHome from './components/loggedhome';
 import Article1 from './components/article1';
 import Article2 from './components/article2';
+import Mybooks from './components/mybooks'; 
 
 function AppRouter() {
   return (
@@ -18,6 +19,7 @@ function AppRouter() {
         <Route path="/loggedhome" element={<LoggedHome />} />
         <Route path="/article1" element={<Article1 />} /> {/* Trasa do artykułu 1 */}
         <Route path="/article2" element={<Article2 />} /> {/* Trasa do artykułu 2 */}
+        <Route path="/mybooks" element={<Mybooks />} />
       </Routes>
     </Router>
   );

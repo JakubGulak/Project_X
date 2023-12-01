@@ -185,8 +185,8 @@ function LoggedHome() {
       </div>
       <div id='content'>
         <div id='menu' style={{ display: 'flex', fontSize: 25, alignItems: 'center', justifyContent: 'space-between', marginLeft: 20, marginRight: 20, fontWeight: 'bold' }}>
-        <p>Historia wypożyczeń</p>
-        <p>Twoje książki ({userBooks.length})</p>
+        <a href='/loggedhome'>Zarezerwuj książke</a>
+        <a href='/mybooks'>Moje książki ({userBooks.length})</a>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
             <input
               type='text'

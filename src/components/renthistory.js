@@ -24,7 +24,7 @@ const firebaseConfig = {
     firebase.initializeApp(firebaseConfig);
   }
 
-function Mybooks() {
+function Renthistory() {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
@@ -85,4 +85,4 @@ function Mybooks() {
   );
 }
 
-export default Mybooks;
+export default Renthistory;
