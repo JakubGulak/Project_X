@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
@@ -26,30 +27,31 @@ const firebaseConfig = {
 
 function Mybooks() {
     const [user, setUser] = useState(null);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const handleLogout = async () => {
-        try {
-          await firebase.auth().signOut();
-          navigate('/');
-        } catch (error) {
-          console.error("Logout error:", error);
-        }
-      };
+  const handleLogout = async () => {
+    try {
+      await firebase.auth().signOut();
+      navigate('/');
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
 
-      useEffect(() => {
-        const unsubscribe = firebase.auth().onAuthStateChanged(async (authUser) => {
-          if (authUser) {
-            setUser(authUser);
-          } else {
-            setUser(null);
-          }
-        });
-    
-        return () => {
-          unsubscribe();
-        };
-      }, []);
+  useEffect(() => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(async (authUser) => {
+      if (authUser) {
+        setUser(authUser);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
     <div id='app'>
@@ -80,6 +82,9 @@ function Mybooks() {
         </div>
       </div>
       <div id='content'>
+      {location.state && location.state.bookTitle && (
+          <h1>{location.state.bookTitle}</h1>
+        )}
       </div>
     </div>
   );

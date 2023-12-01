@@ -109,7 +109,7 @@ function LoggedHome() {
     }
   };
 
-  const rentBook = async (bookId) => {
+  const rentBook = async (bookId, bookTitle) => {
     try {
       console.log('Próba rezerwacji książki o ID:', bookId);
       const bookRef = firestore.collection('books').doc(String(bookId));
@@ -120,6 +120,9 @@ function LoggedHome() {
       if (bookSnapshot.exists) {
         const bookData = bookSnapshot.data();
         console.log('Tytuł książki:', bookData.title);
+  
+        // Przekieruj do strony Mybooks, przekazując tytuł książki
+        navigate('/mybooks', { state: { bookTitle: bookData.title } });
       } else {
         console.log("Książka nie istnieje.");
       }
@@ -227,9 +230,9 @@ function LoggedHome() {
                   {book.availability ? '✅' : '❌'}
                 </td>
                 <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>
-                  {book.availability && (
-                    <button onClick={() => rentBook(book.id)}>Zarezerwuj!</button>
-                  )}
+                {book.availability && (
+        <button onClick={() => rentBook(book.id, book.title)}>Zarezerwuj!</button>
+      )}
                 </td>
               </tr>
             ))}
