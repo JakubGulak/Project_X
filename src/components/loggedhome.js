@@ -227,7 +227,7 @@ function LoggedHome() {
                 </tr>
               </tbody>
             </table>
-            {/* Add any other book details you want to display */}
+            {/* Add any other book details you want to display ss*/}
             <button onClick={closeBookDetails}>Zamknij</button>
           </div>
         )}
