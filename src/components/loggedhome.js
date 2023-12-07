@@ -58,11 +58,26 @@ function LoggedHome() {
       await bookRef.update({
         availability: false,
       });
-      setReservedBooks((prevReservedBooks) => [...prevReservedBooks, bookId]);
+  
       console.log('Książka została zarezerwowana!');
     } catch (error) {
       console.error('Błąd podczas aktualizacji dostępności książki:', error);
     }
+  };
+  
+  const handleReservation = (bookId) => {
+    updateBookAvailability(bookId)
+      .then(() => {
+        // Po potwierdzeniu rezerwacji z serwera Firebase, zaktualizuj lokalny stan
+        const updatedBooks = allBooks.map((book) =>
+          book.id === bookId ? { ...book, availability: false } : book
+        );
+        setAllBooks(updatedBooks);
+        setReservedBooks((prevReservedBooks) => [...prevReservedBooks, bookId]);
+      })
+      .catch((error) => {
+        console.error('Błąd podczas obsługi rezerwacji:', error);
+      });
   };
 
   useEffect(() => {
@@ -80,12 +95,13 @@ function LoggedHome() {
       await bookRef.update({
         availability: true,
       });
-      setSelectedBooks((prevSelectedBooks) =>
-        prevSelectedBooks.length === 1
-          ? []
-          : prevSelectedBooks.filter((selectedBook) => selectedBook.id !== bookId)
+  
+      setReservedBooks((prevReservedBooks) =>
+        prevReservedBooks.filter((reservedBookId) => reservedBookId !== bookId)
       );
-      closeBookDetails();
+      setSelectedBooks((prevSelectedBooks) =>
+        prevSelectedBooks.filter((selectedBook) => selectedBook.id !== bookId)
+      );
       console.log('Rezerwacja została anulowana. Książka jest ponownie dostępna.');
     } catch (error) {
       console.error('Błąd podczas anulowania rezerwacji:', error);
@@ -234,20 +250,29 @@ function LoggedHome() {
                       {returnDate && returnDate.toISOString().split('T')[0]}
                     </td>
                     <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>
-                      <button
-                        onClick={() => {
-                          cancelReservation(selectedBook.id);
-                          closeBookDetails();
-                        }}
-                      >
-                        Odrezerwuj
-                      </button>
+                    <button
+                      onClick={() => {
+                        // Zmiana dostępności książki na true po kliknięciu przycisku "Odrezerwuj"
+                        const bookId = selectedBook.id;
+                        const bookIndex = allBooks.findIndex((book) => book.id === bookId);
+                        
+                        // Aktualizacja lokalnego stanu
+                        const updatedBooks = [...allBooks];
+                        updatedBooks[bookIndex].availability = true;
+                        setAllBooks(updatedBooks);
+
+                        // Anulowanie rezerwacji
+                        cancelReservation(bookId);
+                        closeBookDetails();
+                      }}
+                    >
+                      Odrezerwuj
+                    </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <button onClick={closeBookDetails}>Zamknij</button>
           </div>
         )}
 
@@ -278,13 +303,13 @@ function LoggedHome() {
                 <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>
                   {book.availability && !reservedBooks.includes(book.id) && (
                     <button
-                      onClick={() => {
-                        updateBookAvailability(book.id);
-                        showBookDetails(book);
-                      }}
-                    >
-                      Zarezerwuj!
-                    </button>
+                    onClick={() => {
+                      handleReservation(book.id);
+                      showBookDetails(book);
+                    }}
+                  >
+                    Zarezerwuj!
+                  </button>
                   )}
                 </td>
               </tr>
