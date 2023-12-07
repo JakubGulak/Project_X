@@ -1,12 +1,12 @@
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-import facebook from './facebook.png';
-import instagram from './instagram.png';
-import ckziu from './ckziu.png';
-import library from './library.jpg'
-import book from './book.jpg'
+import facebook from './images/facebook.png';
+import instagram from './images/instagram.png';
+import ckziu from './images/ckziu.png';
+import library from './images/library.jpg'
+import book from './images/book.jpg'
 import { Link } from 'react-router-dom'; 
-import './home.css';
+import './home.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 

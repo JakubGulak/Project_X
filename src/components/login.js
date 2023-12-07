@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-import facebook from './facebook.png';
-import instagram from './instagram.png';
-import ckziu from './ckziu.png';
-import book from './book.png';
+import facebook from './images/facebook.png';
+import instagram from './images/instagram.png';
+import ckziu from './images/ckziu.png';
+import book from './images/book.png';
 import './login.css';
 
 const firebaseConfig = {
