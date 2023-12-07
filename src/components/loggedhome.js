@@ -49,6 +49,47 @@ function LoggedHome() {
     setSelectedBook(null);
   };
 
+  const updateBookAvailability = async (bookId) => {
+    try {
+      const bookRef = firestore.collection('books').doc(String(bookId));
+      await bookRef.update({
+        availability: false, // Assuming you already have an 'availability' field
+      });
+
+      // Optionally, you can update the state to trigger a re-render
+      setAllBooks((prevBooks) =>
+        prevBooks.map((book) =>
+          book.id === bookId ? { ...book, availability: false,} : book
+        )
+      );
+
+      console.log('Książka została zarezerwowana!');
+    } catch (error) {
+      console.error('Błąd podczas aktualizacji dostępności książki:', error);
+    }
+  };
+
+  const cancelReservation = async (bookId) => {
+    try {
+      const bookRef = firestore.collection('books').doc(String(bookId));
+      await bookRef.update({
+        availability: true,
+      });
+
+      // Opcjonalnie, możesz zaktualizować stan, aby ponownie narysować widok
+      setAllBooks((prevBooks) =>
+        prevBooks.map((book) =>
+          book.id === bookId ? { ...book, availability: true } : book
+        )
+      );
+
+      console.log('Rezerwacja została anulowana. Książka jest ponownie dostępna.');
+    } catch (error) {
+      console.error('Błąd podczas anulowania rezerwacji:', error);
+    }
+  };
+
+
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged(async (authUser) => {
       if (authUser) {
@@ -110,17 +151,31 @@ function LoggedHome() {
 
   // const rentBook = async (bookId) => {
   //   try {
-  //     console.log('Próba rezerwacji książki o ID:', bookId);
   //     const bookRef = firestore.collection('books').doc(String(bookId));
   //     const bookSnapshot = await bookRef.get();
   
   //     if (bookSnapshot.exists) {
   //       const bookData = bookSnapshot.data();
-  //       console.log('ID książki:', bookData.ID);
-  //       console.log('Tytuł książki:', bookData.title);
-  //       console.log('Autor książki:', bookData.author);
-  //       console.log('Kategoria książki:', bookData.category);
-  //       console.log('Dostępność książki:', bookData.availability);
+  
+  //       // Sprawdź, czy książka jest dostępna
+  //       if (bookData.availability) {
+  //         // Zaktualizuj dostępność książki
+  //         await bookRef.update({
+  //           availability: false,
+  //           reservedBy: user.uid, // Przypisz książkę do aktualnie zalogowanego użytkownika
+  //         });
+  
+  //         // Zarezerwuj książkę na użytkownika
+  //         const reservationRef = await firestore.collection('reservations').add({
+  //           bookId: bookId,
+  //           userId: user.uid,
+  //           reservationDate: new Date().toISOString(),
+  //         });
+  
+  //         console.log('Książka została zarezerwowana:', reservationRef.id);
+  //       } else {
+  //         console.log('Książka jest już zarezerwowana.');
+  //       }
   //     } else {
   //       console.log("Książka nie istnieje.");
   //     }
@@ -128,6 +183,7 @@ function LoggedHome() {
   //     console.error('Błąd podczas rezerwacji książki:', error);
   //   }
   // };
+  
   
   
   
@@ -215,6 +271,7 @@ function LoggedHome() {
                   <th style={{ ...tableHeaderStyle, textAlign: 'center', verticalAlign: 'middle' }}>Tytuł książki</th>
                   <th style={{ ...tableHeaderStyle, textAlign: 'center', verticalAlign: 'middle' }}>Kategoria</th>
                   <th style={{ ...tableHeaderStyle, textAlign: 'center', verticalAlign: 'middle' }}>Data oddania</th>
+                  <th style={{ ...tableHeaderStyle, textAlign: 'center', verticalAlign: 'middle' }}>Odrezerwuj</th>
                 </tr>
               </thead>
               <tbody>
@@ -224,6 +281,7 @@ function LoggedHome() {
                   <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{selectedBook.title}</td>
                   <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{selectedBook.category}</td>
                   <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{returnDate && returnDate.toISOString().split('T')[0]}</td>
+                  <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}><button onClick={() => { cancelReservation(selectedBook.id); }}>Odrezerwuj</button></td>
                 </tr>
               </tbody>
             </table>
@@ -255,7 +313,8 @@ function LoggedHome() {
                 </td>
                 <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>
                   {book.availability && (
-                    <button onClick={() => showBookDetails(book)}>Zarezerwuj!</button>
+                     <button onClick={() => { updateBookAvailability(book.id); showBookDetails(book); }}>Zarezerwuj!</button>
+
                   )}
                 </td>
               </tr>
