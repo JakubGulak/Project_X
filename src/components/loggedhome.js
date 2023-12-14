@@ -40,6 +40,8 @@ function LoggedHome() {
     setShowAvailableOnly(!showAvailableOnly);
   };
 
+  
+
   const showBookDetails = (book) => {
     setSelectedBooks((prevSelectedBooks) => [...prevSelectedBooks, book]);
     const today = new Date();
@@ -48,36 +50,70 @@ function LoggedHome() {
     setReturnDate(returnDate);
   };
 
+  useEffect(() => {
+    const fetchReservedBooks = async (userId) => {
+      try {
+        const userReservedBooksRef = firestore.collection('userReservedBooks').doc(userId);
+        const reservedBooksData = await userReservedBooksRef.get();
+        const reservedBooks = reservedBooksData.exists ? reservedBooksData.data().books : [];
+        console.log('Zarezerwowane książki:', reservedBooks);
+      } catch (error) {
+        console.error('Błąd podczas pobierania zarezerwowanych książek:', error);
+      }
+    };
+
+    const unsubscribe = firebase.auth().onAuthStateChanged(async (authUser) => {
+      if (authUser) {
+        setUser(authUser);
+        await fetchReservedBooks(authUser.uid);
+      } else {
+        setUser(null);
+        setReservedBooks([]);
+      }
+    });
+    
+  
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   const closeBookDetails = () => {
     setSelectedBooks([]);
   };
 
-  const updateBookAvailability = async (bookId) => {
+  // const updateBookAvailability = async (bookId) => {
+  //   try {
+  //     const bookRef = firestore.collection('books').doc(String(bookId));
+  //     await bookRef.update({
+  //       availability: false,
+  //     });
+  
+  //     console.log('Książka została zarezerwowana!');
+  //   } catch (error) {
+  //     console.error('Błąd podczas aktualizacji dostępności książki:', error);
+  //   }
+  // };
+  
+  const handleReservation = async (bookId) => {
     try {
+      // Zaktualizuj dostępność książki w kolekcji 'books'
       const bookRef = firestore.collection('books').doc(String(bookId));
       await bookRef.update({
         availability: false,
       });
   
+      // Dodaj zarezerwowaną książkę do kolekcji 'userReservedBooks' dla bieżącego użytkownika
+      const userReservedBooksRef = firestore.collection('userReservedBooks').doc(user.uid);
+      const reservedBooksData = await userReservedBooksRef.get();
+      const reservedBooks = reservedBooksData.exists ? reservedBooksData.data().books : [];
+      reservedBooks.push(bookId);
+      await userReservedBooksRef.set({ books: reservedBooks });
+  
       console.log('Książka została zarezerwowana!');
     } catch (error) {
-      console.error('Błąd podczas aktualizacji dostępności książki:', error);
+      console.error('Błąd podczas obsługi rezerwacji:', error);
     }
-  };
-  
-  const handleReservation = (bookId) => {
-    updateBookAvailability(bookId)
-      .then(() => {
-        // Po potwierdzeniu rezerwacji z serwera Firebase, zaktualizuj lokalny stan
-        const updatedBooks = allBooks.map((book) =>
-          book.id === bookId ? { ...book, availability: false } : book
-        );
-        setAllBooks(updatedBooks);
-        setReservedBooks((prevReservedBooks) => [...prevReservedBooks, bookId]);
-      })
-      .catch((error) => {
-        console.error('Błąd podczas obsługi rezerwacji:', error);
-      });
   };
 
   useEffect(() => {
@@ -91,22 +127,36 @@ function LoggedHome() {
 
   const cancelReservation = async (bookId) => {
     try {
+      // Zaktualizuj dostępność książki w kolekcji 'books'
       const bookRef = firestore.collection('books').doc(String(bookId));
       await bookRef.update({
         availability: true,
       });
   
-      setReservedBooks((prevReservedBooks) =>
-        prevReservedBooks.filter((reservedBookId) => reservedBookId !== bookId)
+      // Usuń zarezerwowaną książkę z kolekcji 'userReservedBooks' dla bieżącego użytkownika
+      const userReservedBooksRef = firestore.collection('userReservedBooks').doc(user.uid);
+      const reservedBooksData = await userReservedBooksRef.get();
+      const reservedBooks = reservedBooksData.exists ? reservedBooksData.data().books : [];
+      const updatedReservedBooks = reservedBooks.filter((reservedBookId) => reservedBookId !== bookId);
+      await userReservedBooksRef.set({ books: updatedReservedBooks });
+  
+      // Aktualizacja lokalnego stanu tylko dla anulowanej książki
+      setAllBooks((prevAllBooks) =>
+        prevAllBooks.map((book) =>
+          book.id === bookId ? { ...book, availability: true } : book
+        )
       );
+  
       setSelectedBooks((prevSelectedBooks) =>
         prevSelectedBooks.filter((selectedBook) => selectedBook.id !== bookId)
       );
+  
       console.log('Rezerwacja została anulowana. Książka jest ponownie dostępna.');
     } catch (error) {
       console.error('Błąd podczas anulowania rezerwacji:', error);
     }
   };
+  
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged(async (authUser) => {
@@ -224,9 +274,10 @@ function LoggedHome() {
             </div>
           </div>
         </div>
+        
         {selectedBooks.length > 0 && (
           <div className="book-details-modal">
-            <table
+            <table id='mybooks'
               style={{ width: '100%', borderCollapse: 'collapse', marginTop: '15px' }}
             >
               <thead>
