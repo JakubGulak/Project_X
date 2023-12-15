@@ -80,7 +80,7 @@ a {
 @media (max-width: 2024px) {
     #firsticon, #secondicon, #thirdicon {
         width: 3vw;
-        height: 3vh;
+        height: 5vh;
     } 
     #header {
         height: 15vh;

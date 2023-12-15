@@ -72,6 +72,20 @@ div#loginHeader{
   width: 10%;
 }
 
+@media (max-width: 2400px) {
+  #loginInput{
+    top: 55%;
+  }
+
+  #passInput{
+    top: 68%;
+  }
+
+  #loginButton{
+    top: 78%;
+  }
+}
+
 
 @media (max-width: 1400px) {
   #loginInput{
