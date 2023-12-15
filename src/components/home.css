@@ -78,7 +78,7 @@ a {
     } 
 }
 
-@media (max-width: 930px) {
+@media (max-width: 980px) {
     #header-content {
         margin-top: 0vh;
         flex-direction: column; 
@@ -95,7 +95,7 @@ a {
     }
 
     #header {
-        height: 24vh;
+        height: 30vh;
     }  
 }
 

@@ -81,76 +81,54 @@ function LoggedHome() {
   const closeBookDetails = () => {
     setSelectedBooks([]);
   };
-
-  // const updateBookAvailability = async (bookId) => {
-  //   try {
-  //     const bookRef = firestore.collection('books').doc(String(bookId));
-  //     await bookRef.update({
-  //       availability: false,
-  //     });
-  
-  //     console.log('Książka została zarezerwowana!');
-  //   } catch (error) {
-  //     console.error('Błąd podczas aktualizacji dostępności książki:', error);
-  //   }
-  // };
   
   const handleReservation = async (bookId) => {
     try {
-      // Zaktualizuj dostępność książki w kolekcji 'books'
       const bookRef = firestore.collection('books').doc(String(bookId));
       await bookRef.update({
         availability: false,
       });
-  
-      // Dodaj zarezerwowaną książkę do kolekcji 'userReservedBooks' dla bieżącego użytkownika
+
       const userReservedBooksRef = firestore.collection('userReservedBooks').doc(user.uid);
       const reservedBooksData = await userReservedBooksRef.get();
       const reservedBooks = reservedBooksData.exists ? reservedBooksData.data().books : [];
       reservedBooks.push(bookId);
       await userReservedBooksRef.set({ books: reservedBooks });
-  
+
+      // Zmiana stanu dostępności w lokalnym stanie
+      setAllBooks((prevAllBooks) =>
+        prevAllBooks.map((book) =>
+          book.id === bookId ? { ...book, availability: false } : book
+        )
+      );
+
       console.log('Książka została zarezerwowana!');
     } catch (error) {
       console.error('Błąd podczas obsługi rezerwacji:', error);
     }
   };
 
-  useEffect(() => {
-    if (selectedBooks.length > 0) {
-      const today = new Date();
-      const returnDate = new Date(today);
-      returnDate.setDate(today.getDate() + 14);
-      setReturnDate(returnDate);
-    }
-  }, [selectedBooks]);
 
   const cancelReservation = async (bookId) => {
     try {
-      // Zaktualizuj dostępność książki w kolekcji 'books'
       const bookRef = firestore.collection('books').doc(String(bookId));
       await bookRef.update({
         availability: true,
       });
-  
-      // Usuń zarezerwowaną książkę z kolekcji 'userReservedBooks' dla bieżącego użytkownika
+
       const userReservedBooksRef = firestore.collection('userReservedBooks').doc(user.uid);
       const reservedBooksData = await userReservedBooksRef.get();
       const reservedBooks = reservedBooksData.exists ? reservedBooksData.data().books : [];
       const updatedReservedBooks = reservedBooks.filter((reservedBookId) => reservedBookId !== bookId);
       await userReservedBooksRef.set({ books: updatedReservedBooks });
-  
-      // Aktualizacja lokalnego stanu tylko dla anulowanej książki
+
+      // Zmiana stanu dostępności w lokalnym stanie
       setAllBooks((prevAllBooks) =>
         prevAllBooks.map((book) =>
           book.id === bookId ? { ...book, availability: true } : book
         )
       );
-  
-      setSelectedBooks((prevSelectedBooks) =>
-        prevSelectedBooks.filter((selectedBook) => selectedBook.id !== bookId)
-      );
-  
+
       console.log('Rezerwacja została anulowana. Książka jest ponownie dostępna.');
     } catch (error) {
       console.error('Błąd podczas anulowania rezerwacji:', error);
@@ -293,7 +271,7 @@ function LoggedHome() {
               <tbody>
                 {selectedBooks.map((selectedBook) => (
                   <tr key={selectedBook.id} style={{ borderBottom: '1px solid #ddd' }}>
-                    <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{selectedBook.id}</td>
+                    <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{selectedBook.ID}</td>
                     <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{selectedBook.author}</td>
                     <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{selectedBook.title}</td>
                     <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>{selectedBook.category}</td>
@@ -303,16 +281,13 @@ function LoggedHome() {
                     <td style={{ ...tableCellStyle, textAlign: 'center', verticalAlign: 'middle' }}>
                     <button
                       onClick={() => {
-                        // Zmiana dostępności książki na true po kliknięciu przycisku "Odrezerwuj"
                         const bookId = selectedBook.id;
                         const bookIndex = allBooks.findIndex((book) => book.id === bookId);
                         
-                        // Aktualizacja lokalnego stanu
                         const updatedBooks = [...allBooks];
                         updatedBooks[bookIndex].availability = true;
                         setAllBooks(updatedBooks);
 
-                        // Anulowanie rezerwacji
                         cancelReservation(bookId);
                         closeBookDetails();
                       }}
