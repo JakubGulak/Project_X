@@ -1,3 +1,9 @@
+#app {
+    height: 140vh;
+    background-color: #f4f1de;
+}
+
+
 #content {
     margin-top: 5vh;
     background-color: #f4f1de;
@@ -69,6 +75,16 @@ a#loga {
 a {
     color: white;
     text-decoration: none;
+}
+
+@media (max-width: 2024px) {
+    #firsticon, #secondicon, #thirdicon {
+        width: 3vw;
+        height: 3vh;
+    } 
+    #header {
+        height: 15vh;
+    } 
 }
 
 @media (max-width: 1024px) {
